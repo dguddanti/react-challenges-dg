@@ -1,4 +1,4 @@
-Create a React web app that displays a schedule for courses for a computer science department. The display should be simple. Use basic HTML and CSS.  Using the test data in the JSON below, the page should look like ![screenshot](./text-ui.png).
+Create a TypeScript React app that displays a hardcoded schedule of CS courses. Each course should render as a single line in the format “Term CS Number: Title”. The data is stored as a nested JSON object keyed by course id.
 
 ```
 const schedules = {
