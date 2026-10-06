@@ -1,0 +1,1 @@
+Style the list of courses so each course appears as a bordered card showing the course title, description, and meeting time. Cards should have uniform height per row, fill the available screen width, and wrap to additional rows as needed. The page should look like ![screenshot](./card-ui.png).

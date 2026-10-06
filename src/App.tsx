@@ -1,4 +1,3 @@
-import './App.css';
 import CourseList from './components/CourseList';
 
 const schedules = {
@@ -16,10 +15,10 @@ const schedules = {
 const App = () => {
   const schedule = schedules["CS-2018-2019"];
   return (
-    <>
+    <main>
       <h1>{schedule.title}</h1>
       <CourseList courses={schedule.courses} />
-    </>
+    </main>
   );
 };
 

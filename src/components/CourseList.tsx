@@ -1,3 +1,5 @@
+import CourseCard from './CourseCard';
+
 interface Course {
   term: string;
   number: string;
@@ -10,11 +12,11 @@ interface CourseListProps {
 }
 
 const CourseList = ({ courses }: CourseListProps) => (
-  <ul>
+  <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4 p-4">
     {Object.entries(courses).map(([id, course]) => (
-      <li key={id}>{course.term} CS {course.number}: {course.title}</li>
+      <CourseCard key={id} course={course} />
     ))}
-  </ul>
+  </div>
 );
 
 export default CourseList;
