@@ -1,0 +1,1 @@
+On load, the app should fetch course data from https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php, showing a loading indicator/message while waiting, show an error message if the fetch fails, and otherwise display all courses using the existing CourseList component.
