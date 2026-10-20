@@ -1,22 +1,21 @@
 import CourseCard from './CourseCard';
-
-interface Course {
-  term: string;
-  number: string;
-  meets: string;
-  title: string;
-}
+import type { Course, Term } from '../types';
 
 interface CourseListProps {
   courses: Record<string, Course>;
+  selectedTerm: Term;
 }
 
-const CourseList = ({ courses }: CourseListProps) => (
-  <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4 p-4">
-    {Object.entries(courses).map(([id, course]) => (
-      <CourseCard key={id} course={course} />
-    ))}
-  </div>
-);
+const CourseList = ({ courses, selectedTerm }: CourseListProps) => {
+  const selectedCourses = Object.entries(courses).filter(([, course]) => course.term === selectedTerm);
+
+  return (
+    <div className="grid w-full grid-cols-[repeat(auto-fit,_minmax(220px,_1fr))] gap-5 p-6">
+      {selectedCourses.map(([id, course]) => (
+        <CourseCard key={id} course={course} />
+      ))}
+    </div>
+  );
+};
 
 export default CourseList;

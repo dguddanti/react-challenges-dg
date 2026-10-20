@@ -1,0 +1,1 @@
+Add Fall/Winter/Spring radio buttons above the course list. Clicking a button updates which term is selected and the course list immediately re-renders to show only courses from that term. By default, the page is initially set to show Fall courses.
