@@ -12,7 +12,7 @@ const CourseList = ({ courses, selectedTerm }: CourseListProps) => {
   return (
     <div className="grid w-full grid-cols-[repeat(auto-fit,_minmax(220px,_1fr))] gap-5 p-6">
       {selectedCourses.map(([id, course]) => (
-        <CourseCard key={id} course={course} />
+        <CourseCard key={id} id={id} course={course} />
       ))}
     </div>
   );

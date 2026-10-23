@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useJsonQuery } from './utilities/fetch';
 import TermSelector from './components/TermSelector';
 import CourseList from './components/CourseList';
+import SelectedCourses from './components/SelectedCourses';
+import SelectionProvider from './contexts/SelectionProvider';
 import type { Schedule, Term } from './types';
 
 const URL = 'https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php';
@@ -22,7 +24,10 @@ const App = () => {
       <div className="mt-3 px-6">
         <TermSelector selected={selectedTerm} setSelected={setSelectedTerm} />
       </div>
-      <CourseList courses={schedule.courses} selectedTerm={selectedTerm} />
+      <SelectionProvider>
+        <SelectedCourses courses={schedule.courses} />
+        <CourseList courses={schedule.courses} selectedTerm={selectedTerm} />
+      </SelectionProvider>
     </main>
   );
 };

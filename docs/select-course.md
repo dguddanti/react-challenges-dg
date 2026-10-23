@@ -1,0 +1,1 @@
+Clicking a course card adds that course to a list of selected courses. Clicking a selected course unselects it. Selected cards get a clear highlight. The selected list is handled with React context. Any number of courses can be selected.
