@@ -1,0 +1,1 @@
+Add a “Course plan” button on the right side of the same row as the term selector. Clicking it opens a modal listing each selected course’s number, title, and meeting times. If nothing is selected, the modal says so and explains how to select courses. The modal has a Close button. Clicking the dark area outside it closes it. Clicking inside it does not.

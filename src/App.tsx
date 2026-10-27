@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useJsonQuery } from './utilities/fetch';
 import TermSelector from './components/TermSelector';
 import CourseList from './components/CourseList';
-import SelectedCourses from './components/SelectedCourses';
+import CoursePlan from './components/CoursePlan';
 import SelectionProvider from './contexts/SelectionProvider';
 import type { Schedule, Term } from './types';
 
@@ -21,11 +21,11 @@ const App = () => {
   return (
     <main className="min-h-screen bg-gray-50 pt-4">
       <h1 className="px-6 text-3xl font-bold text-gray-900">{schedule.title}</h1>
-      <div className="mt-3 px-6">
-        <TermSelector selected={selectedTerm} setSelected={setSelectedTerm} />
-      </div>
       <SelectionProvider>
-        <SelectedCourses courses={schedule.courses} />
+        <div className="mt-3 flex items-center justify-between gap-4 px-6">
+          <TermSelector selected={selectedTerm} setSelected={setSelectedTerm} />
+          <CoursePlan courses={schedule.courses} />
+        </div>
         <CourseList courses={schedule.courses} selectedTerm={selectedTerm} />
       </SelectionProvider>
     </main>
