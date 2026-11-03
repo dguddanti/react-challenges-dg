@@ -1,0 +1,1 @@
+Add an edit page with a form holding text inputs for a course’s title and meeting times, prefilled with that course’s data. Each course card gets an Edit link that opens this page. The form has a Cancel button that returns to the course list, no Submit button, and an onSubmit handler that does nothing. 
