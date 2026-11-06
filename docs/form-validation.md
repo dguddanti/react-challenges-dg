@@ -1,0 +1,1 @@
+Add a Zod schema for courses (title of at least 2 characters, term one of Fall/Winter/Spring/Summer, number like “213” or “213-2”, meeting time empty or one or more days plus a non-empty start-end timespan). Use it as the form’s resolver, validating on every keystroke, with an error message next to each field that has bad data. 
