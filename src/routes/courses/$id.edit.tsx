@@ -1,8 +1,9 @@
-import { Link, createFileRoute, useLoaderData } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import CourseForm from '../../components/CourseForm';
+import { useSchedule } from '../../contexts/ScheduleContext';
 
 const EditCoursePage = () => {
-  const { courses } = useLoaderData({ from: '__root__' });
+  const { courses } = useSchedule();
   const { id } = Route.useParams();
   const course = courses[id];
 

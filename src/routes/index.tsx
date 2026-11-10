@@ -1,14 +1,15 @@
-import { createFileRoute, useLoaderData } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import TermSelector from '../components/TermSelector';
 import CourseList from '../components/CourseList';
 import CoursePlan from '../components/CoursePlan';
+import { useSchedule } from '../contexts/ScheduleContext';
 import { TERMS } from '../types';
 import type { Term } from '../types';
 
 const isTerm = (value: unknown): value is Term => TERMS.includes(value as Term);
 
 const CoursesPage = () => {
-  const { courses } = useLoaderData({ from: '__root__' });
+  const { courses } = useSchedule();
   const { term } = Route.useSearch();
   const navigate = Route.useNavigate();
 
