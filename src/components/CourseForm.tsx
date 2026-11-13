@@ -1,23 +1,44 @@
+import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { Link, useNavigate } from '@tanstack/react-router';
 import CourseField from './CourseField';
 import { courseResolver } from '../types';
+import { updateData } from '../utilities/firebase';
 import type { Course, Term } from '../types';
 
 interface CourseFormProps {
+  id: string;
   course: Course;
 }
 
-const CourseForm = ({ course }: CourseFormProps) => {
+const CourseForm = ({ id, course }: CourseFormProps) => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm<Course>({
+  const { register, handleSubmit, formState: { errors, isDirty, isValid, isSubmitting } } = useForm<Course>({
     defaultValues: course,
     mode: 'onChange',
     resolver: courseResolver,
   });
 
-  // Saving isn't implemented yet; handleSubmit still prevents the page reload
-  const onSubmit: SubmitHandler<Course> = () => {};
+  const [saveError, setSaveError] = useState<string>();
+
+  // handleSubmit only calls this once the resolver says every field is valid.
+  // data holds the parsed values (e.g., title trimmed), so compare those to the
+  // original course to catch edits that don't actually change anything.
+  const onSubmit: SubmitHandler<Course> = async (data) => {
+    const changed = (Object.keys(data) as (keyof Course)[]).some((key) => data[key] !== course[key]);
+    if (!changed) return;
+
+    setSaveError(undefined);
+    try {
+      await updateData(`/courses/${id}`, data);
+      // The root useDataQuery listener picks up the change, so the list is already current
+      navigate({ to: '/', search: { term: data.term as Term } });
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : String(error));
+    }
+  };
+
+  const canSubmit = isDirty && isValid && !isSubmitting;
 
   const backSearch = { term: course.term as Term };
 
@@ -61,6 +82,12 @@ const CourseForm = ({ course }: CourseFormProps) => {
             />
           </div>
 
+          {saveError && (
+            <p role="alert" className="px-6 pb-3 text-sm text-red-600">
+              Couldn't save: {saveError}
+            </p>
+          )}
+
           <footer className="flex justify-end gap-2 rounded-b-xl border-t border-gray-100 bg-gray-50 px-6 py-3">
             <button
               type="button"
@@ -68,6 +95,13 @@ const CourseForm = ({ course }: CourseFormProps) => {
               className="cursor-pointer rounded-full border border-gray-300 bg-white px-5 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2"
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              className="cursor-pointer rounded-full bg-indigo-600 px-5 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            >
+              {isSubmitting ? 'Saving…' : 'Submit'}
             </button>
           </footer>
         </form>

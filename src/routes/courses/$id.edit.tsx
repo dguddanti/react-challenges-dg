@@ -18,7 +18,7 @@ const EditCoursePage = () => {
     );
   }
 
-  return <CourseForm course={course} />;
+  return <CourseForm id={id} course={course} />;
 };
 
 export const Route = createFileRoute('/courses/$id/edit')({

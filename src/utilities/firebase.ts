@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, onValue, ref } from 'firebase/database';
+import { getDatabase, onValue, ref, update } from 'firebase/database';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -39,3 +39,9 @@ export const useDataQuery = (path: string): [unknown, boolean, Error | undefined
 
   return [data, loading, error];
 };
+
+
+// Writes the given fields at path, leaving any other fields there untouched.
+// Listeners from useDataQuery see the change and re-render automatically.
+export const updateData = (path: string, value: object): Promise<void> =>
+  update(ref(database, path), value);
