@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { useSelection } from '../contexts/SelectionContext';
+import { useAuthState } from '../utilities/firebase';
 import type { Course } from '../types';
 
 interface CourseCardProps {
@@ -16,6 +17,7 @@ const cardStyle = (isSelected: boolean, isConflicting: boolean) => {
 
 const CourseCard = ({ id, course, isConflicting }: CourseCardProps) => {
   const { selected, toggleSelected } = useSelection();
+  const { isAuthenticated } = useAuthState();
   const isSelected = selected.includes(id);
 
   return (
@@ -46,13 +48,15 @@ const CourseCard = ({ id, course, isConflicting }: CourseCardProps) => {
       </button>
       <div className={`flex w-full items-center justify-between gap-2 border-t pt-2 text-sm text-gray-500 ${isSelected ? 'border-indigo-100' : 'border-gray-100'}`}>
         <span>{course.meets}</span>
-        <Link
-          to="/courses/$id/edit"
-          params={{ id }}
-          className="relative z-10 font-medium text-indigo-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
-        >
-          Edit
-        </Link>
+        {isAuthenticated && (
+          <Link
+            to="/courses/$id/edit"
+            params={{ id }}
+            className="relative z-10 font-medium text-indigo-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+          >
+            Edit
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, onValue, ref, update } from 'firebase/database';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut, type NextOrObserver, type User } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -17,6 +19,7 @@ const firebaseConfig = {
 
 const firebase = initializeApp(firebaseConfig);
 const database = getDatabase(firebase);
+const auth = getAuth(firebase);
 
 export const useDataQuery = (path: string): [unknown, boolean, Error | undefined] => {
   const [data, setData] = useState();
@@ -40,8 +43,40 @@ export const useDataQuery = (path: string): [unknown, boolean, Error | undefined
   return [data, loading, error];
 };
 
-
 // Writes the given fields at path, leaving any other fields there untouched.
 // Listeners from useDataQuery see the change and re-render automatically.
 export const updateData = (path: string, value: object): Promise<void> =>
   update(ref(database, path), value);
+
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, new GoogleAuthProvider());
+};
+
+const firebaseSignOut = () => signOut(auth);
+
+export { firebaseSignOut as signOut };
+
+export interface AuthState {
+  user: User | null,
+  isAuthenticated: boolean,
+  isInitialLoading: boolean
+}
+
+export const addAuthStateListener = (fn: NextOrObserver<User | null>) => (
+  onAuthStateChanged(auth, fn)
+);
+
+export const useAuthState = (): AuthState => {
+  const [user, setUser] = useState(auth.currentUser);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const isAuthenticated = !!user;
+
+  useEffect(() => addAuthStateListener((user) => {
+    flushSync(() => {
+      setUser(user);
+      setIsInitialLoading(false);
+    });
+  }), []);
+
+  return { user, isAuthenticated, isInitialLoading };
+};

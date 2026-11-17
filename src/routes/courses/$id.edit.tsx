@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute, redirect } from '@tanstack/react-router';
 import CourseForm from '../../components/CourseForm';
 import { useSchedule } from '../../contexts/ScheduleContext';
 
@@ -22,5 +22,15 @@ const EditCoursePage = () => {
 };
 
 export const Route = createFileRoute('/courses/$id/edit')({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      })
+    }
+  },
   component: EditCoursePage,
 });
