@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { useSelection } from '../contexts/SelectionContext';
-import { useAuthState } from '../utilities/firebase';
+import { useProfile } from '../utilities/profile';
 import type { Course } from '../types';
 
 interface CourseCardProps {
@@ -17,8 +17,10 @@ const cardStyle = (isSelected: boolean, isConflicting: boolean) => {
 
 const CourseCard = ({ id, course, isConflicting }: CourseCardProps) => {
   const { selected, toggleSelected } = useSelection();
-  const { isAuthenticated } = useAuthState();
+  const [profile, profileLoading, profileError] = useProfile();
   const isSelected = selected.includes(id);
+  // Hide the Edit link until we know for sure the user is an admin
+  const canEdit = !profileLoading && !profileError && profile.isAdmin;
 
   return (
     // The toggle button's ::after stretches over the whole card so any click selects it,
@@ -48,7 +50,7 @@ const CourseCard = ({ id, course, isConflicting }: CourseCardProps) => {
       </button>
       <div className={`flex w-full items-center justify-between gap-2 border-t pt-2 text-sm text-gray-500 ${isSelected ? 'border-indigo-100' : 'border-gray-100'}`}>
         <span>{course.meets}</span>
-        {isAuthenticated && (
+        {canEdit && (
           <Link
             to="/courses/$id/edit"
             params={{ id }}
